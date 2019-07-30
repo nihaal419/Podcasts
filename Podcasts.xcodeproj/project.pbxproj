@@ -12,6 +12,8 @@
 		0629B9EF22DE120100C11AF5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0629B9ED22DE120100C11AF5 /* Main.storyboard */; };
 		0629B9F122DE120300C11AF5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0629B9F022DE120300C11AF5 /* Assets.xcassets */; };
 		0629B9F422DE120300C11AF5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0629B9F222DE120300C11AF5 /* LaunchScreen.storyboard */; };
+		0629B9FC22DE121A00C11AF5 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0629B9FB22DE121A00C11AF5 /* MainTabBarController.swift */; };
+		0629BA0022DE1F6D00C11AF5 /* PodcastSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0629B9FF22DE1F6D00C11AF5 /* PodcastSearchController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		0629B9F022DE120300C11AF5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0629B9F322DE120300C11AF5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0629B9F522DE120300C11AF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0629B9FB22DE121A00C11AF5 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		0629B9FF22DE1F6D00C11AF5 /* PodcastSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastSearchController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,14 +58,24 @@
 		0629B9E822DE120100C11AF5 /* Podcasts */ = {
 			isa = PBXGroup;
 			children = (
+				0629BA0122DE1FCD00C11AF5 /* New Group */,
 				0629B9E922DE120100C11AF5 /* AppDelegate.swift */,
 				0629B9EB22DE120100C11AF5 /* ViewController.swift */,
 				0629B9ED22DE120100C11AF5 /* Main.storyboard */,
 				0629B9F022DE120300C11AF5 /* Assets.xcassets */,
 				0629B9F222DE120300C11AF5 /* LaunchScreen.storyboard */,
 				0629B9F522DE120300C11AF5 /* Info.plist */,
+				0629B9FB22DE121A00C11AF5 /* MainTabBarController.swift */,
+				0629B9FF22DE1F6D00C11AF5 /* PodcastSearchController.swift */,
 			);
 			path = Podcasts;
+			sourceTree = "<group>";
+		};
+		0629BA0122DE1FCD00C11AF5 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,8 +149,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0629BA0022DE1F6D00C11AF5 /* PodcastSearchController.swift in Sources */,
 				0629B9EC22DE120100C11AF5 /* ViewController.swift in Sources */,
 				0629B9EA22DE120100C11AF5 /* AppDelegate.swift in Sources */,
+				0629B9FC22DE121A00C11AF5 /* MainTabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
