@@ -21,14 +21,8 @@ class PodcastCell: UITableViewCell {
             artistNameLabel.text = podcast.artistName
             episodeCountLabel.text = "\(podcast.trackCount ?? 0) Episodes"
             
-            guard let url = URL(string: podcast.artworkUrl600 ?? "") else {return}
-            
-//            URLSession.shared.dataTask(with: url) { (data, _, _) in
-//                guard let data = data else {return}
-//                DispatchQueue.main.async {
-//                    self.podcastImageView.image = UIImage(data: data)
-//                }
-//            }.resume()
+            guard let artworkUrl = podcast.artworkUrl600 else {return}
+            let url = URL(string: artworkUrl.toSecureHTTPS())
             
             podcastImageView.sd_setImage(with: url, completed: nil)
         }
