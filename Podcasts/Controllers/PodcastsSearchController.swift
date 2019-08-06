@@ -58,7 +58,11 @@ class PodcastsSearchController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let label = UILabel()
-        label.text = "Please enter a Search Term"
+        if searchController.searchBar.text != "" {
+            label.text = "No results found"
+        } else {
+            label.text = "Please enter a Search Term"
+        }
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         label.textColor = .purple

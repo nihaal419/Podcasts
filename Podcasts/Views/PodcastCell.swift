@@ -10,7 +10,12 @@ import UIKit
 import SDWebImage
 
 class PodcastCell: UITableViewCell {
-    @IBOutlet weak var podcastImageView: UIImageView!
+    @IBOutlet weak var podcastImageView: UIImageView! {
+        didSet {
+            podcastImageView.layer.cornerRadius = 5
+            podcastImageView.clipsToBounds = true
+        }
+    }
     @IBOutlet weak var trackNameLabel: UILabel!
     @IBOutlet weak var artistNameLabel: UILabel!
     @IBOutlet weak var episodeCountLabel: UILabel!
