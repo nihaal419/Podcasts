@@ -15,11 +15,16 @@ class PlayerDetailsView: UIView {
         didSet {
             episodeTitle.text = episode.title
             artistNameLabel.text = episode.author
+            miniEpisodeTitle.text = episode.title
             
             playEpisode()
             
             let imageUrl = URL(string: episode.imageUrl?.toSecureHTTPS() ?? "")
             episodeImageView.sd_setImage(with: imageUrl)
+            miniEpisodeImageView.sd_setImage(with: imageUrl)
+            
+            playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            miniPlayPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
         }
     }
     
@@ -59,8 +64,36 @@ class PlayerDetailsView: UIView {
         self.currentTimeSlider.value = Float(percentage)
     }
     
+    var panGesture: UIPanGestureRecognizer!
+    
+    fileprivate func setupGestures() {
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
+        panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        miniPlayerView.addGestureRecognizer(panGesture)
+        
+        maximizedStackView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismissalPan)))
+    }
+    
+    @objc func handleDismissalPan(gesture: UIPanGestureRecognizer) {
+        if gesture.state == .changed {
+            let translation = gesture.translation(in: superview)
+            maximizedStackView.transform = CGAffineTransform(translationX: 0, y: translation.y)
+        } else if gesture.state == .ended {
+            let translation = gesture.translation(in: superview)
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.maximizedStackView.transform = .identity
+                
+                if translation.y > 50 {
+                    UIApplication.mainTabBarController()?.minimizePlayerDetails()
+                }
+            })
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        setupGestures()
         
         observePlayerCurrentTime()
         
@@ -87,6 +120,8 @@ class PlayerDetailsView: UIView {
         }
     }
     
+    @IBOutlet weak var miniEpisodeImageView: UIImageView!
+    
     fileprivate func enlargeEpisodeImageView() {
         UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             
@@ -103,6 +138,8 @@ class PlayerDetailsView: UIView {
         })
     }
     
+    @IBOutlet weak var miniPlayerView: UIView!
+    @IBOutlet weak var maximizedStackView: UIStackView!
     @IBOutlet weak var currentTimeSlider: UISlider!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var currentTimeLabel: UILabel!
@@ -112,6 +149,9 @@ class PlayerDetailsView: UIView {
             episodeTitle.numberOfLines = 2
         }
     }
+    
+    @IBOutlet weak var miniEpisodeTitle: UILabel!
+    
     @IBOutlet weak var artistNameLabel: UILabel! {
         didSet {
             artistNameLabel.numberOfLines = 2
@@ -119,7 +159,7 @@ class PlayerDetailsView: UIView {
     }
     
     @IBAction func handleDismiss(_ sender: Any) {
-        self.removeFromSuperview()
+        UIApplication.mainTabBarController()?.minimizePlayerDetails()
     }
     
     @IBOutlet weak var playPauseButton: UIButton! {
@@ -129,14 +169,24 @@ class PlayerDetailsView: UIView {
         }
     }
     
+    @IBOutlet weak var miniPlayPauseButton: UIButton! {
+        didSet {
+            miniPlayPauseButton.addTarget(self, action: #selector(handlePlayPause), for: .touchUpInside)
+        }
+    }
+    
+    @IBOutlet weak var miniFastForwardButton: UIButton!
+    
     @objc func handlePlayPause() {
         if player.timeControlStatus == .paused {
             player.play()
             playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            miniPlayPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             enlargeEpisodeImageView()
         } else {
             player.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            miniPlayPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
             shrinkEpisodeImageView()
         }
     }
@@ -149,11 +199,11 @@ class PlayerDetailsView: UIView {
     }
     
     @IBAction func handleRewind(_ sender: Any) {
-        seekToCurrentTime(delta: -15)
+        seekToCurrentTime(delta: -10)
     }
     
     @IBAction func handleFastForward(_ sender: Any) {
-        seekToCurrentTime(delta: 15)
+        seekToCurrentTime(delta: 10)
     }
     
     @IBAction func handleCurrentTimeSliderChange(_ sender: Any) {
