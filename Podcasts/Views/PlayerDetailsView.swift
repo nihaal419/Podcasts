@@ -18,11 +18,20 @@ class PlayerDetailsView: UIView {
             artistNameLabel.text = episode.author
             miniEpisodeTitle.text = episode.title
             
+            setupNowPlayingInfo()
+            
             playEpisode()
             
             let imageUrl = URL(string: episode.imageUrl?.toSecureHTTPS() ?? "")
             episodeImageView.sd_setImage(with: imageUrl)
-            miniEpisodeImageView.sd_setImage(with: imageUrl)
+            miniEpisodeImageView.sd_setImage(with: imageUrl) { (image, _, _, _) in
+                let image = self.episodeImageView.image ?? UIImage()
+                
+                let artworkItem = MPMediaItemArtwork(boundsSize: .zero, requestHandler: { (size) -> UIImage in
+                    return image
+                })
+                MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyArtwork] = artworkItem
+            }
             
             playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             miniPlayPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
@@ -34,6 +43,15 @@ class PlayerDetailsView: UIView {
         avPlayer.automaticallyWaitsToMinimizeStalling = false
         return avPlayer
     }()
+    
+    fileprivate func setupNowPlayingInfo() {
+        var nowPlayingInfo = [String:Any]()
+        
+        nowPlayingInfo[MPMediaItemPropertyTitle] = episode.title
+        nowPlayingInfo[MPMediaItemPropertyArtist] = episode.author
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
     
     fileprivate func playEpisode() {
         let streamUrl = episode.streamUrl.toSecureHTTPS()
@@ -111,6 +129,7 @@ class PlayerDetailsView: UIView {
             self.playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             self.miniPlayPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             self.enlargeEpisodeImageView()
+            self.setupElapsedTime()
             return .success
         }
         
@@ -120,33 +139,89 @@ class PlayerDetailsView: UIView {
             self.playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
             self.miniPlayPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
             self.shrinkEpisodeImageView()
+            self.setupElapsedTime()
             return .success
         }
         
         commandCenter.togglePlayPauseCommand.isEnabled = true
         commandCenter.togglePlayPauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
             self.handlePlayPause()
-            
             return .success
         }
+        
+        commandCenter.nextTrackCommand.addTarget(self, action: #selector(handleNextTrack))
+        commandCenter.previousTrackCommand.addTarget(self, action: #selector(handlePreviousTrack))
+    }
+    
+    var playlistEpisodes = [Episode]()
+    
+    @objc fileprivate func handlePreviousTrack() {
+        if playlistEpisodes.count == 0 { return }
+        
+        let currentEpisodeIndex = playlistEpisodes.firstIndex { (episode) -> Bool in
+            return (self.episode.title == episode.title) && (self.episode.author == episode.author)
+        }
+        
+        guard let index = currentEpisodeIndex else {return}
+        
+        let previousEpisode: Episode
+        if index == 0 {
+            return
+        } else {
+            previousEpisode = playlistEpisodes[index - 1]
+        }
+        self.episode = previousEpisode
+    }
+    
+    @objc fileprivate func handleNextTrack() {
+        if playlistEpisodes.count == 0 {
+            return
+        }
+        
+        let currentEpisodeIndex = playlistEpisodes.firstIndex { (episode) -> Bool in
+            return (self.episode.title == episode.title) && (self.episode.author == episode.author)
+        }
+        
+        guard let index = currentEpisodeIndex else {return}
+        
+        let nextEpisode: Episode
+        if index == playlistEpisodes.count - 1 {
+            return
+        } else {
+            nextEpisode = playlistEpisodes[index + 1]
+        }
+        self.episode = nextEpisode
+    }
+    
+    fileprivate func setupElapsedTime() {
+        let elapsedTime = CMTimeGetSeconds(player.currentTime())
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
+    }
+    
+    fileprivate func observeBoundaryTime() {
+        let time = CMTimeMake(value: 1, timescale: 3)
+        let times = [NSValue(time: time)]
+        player.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
+            self?.enlargeEpisodeImageView()
+            self?.setupLockScreenDuration()
+        }
+    }
+    
+    fileprivate func setupLockScreenDuration() {
+        guard let duration = player.currentItem?.duration else {return}
+        let durationInSeconds = CMTimeGetSeconds(duration)
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = durationInSeconds
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         setupRemoteControl()
-        
         setupAudioSession()
-        
         setupGestures()
-        
         observePlayerCurrentTime()
-        
-        let time = CMTimeMake(value: 1, timescale: 3)
-        let times = [NSValue(time: time)]
-        player.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
-            self?.enlargeEpisodeImageView()
-        }
+        observeBoundaryTime()
     }
     
     static func initFromNib() -> PlayerDetailsView {
@@ -258,6 +333,8 @@ class PlayerDetailsView: UIView {
         let durationInSeconds = CMTimeGetSeconds(duration)
         let seekTimeInSeconds = Float64(percentage) * durationInSeconds
         let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: Int32(NSEC_PER_SEC))
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
         
         player.seek(to: seekTime)
     }
