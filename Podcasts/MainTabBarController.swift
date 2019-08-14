@@ -81,8 +81,10 @@ class MainTabBarController: UITabBarController {
     }
     
     fileprivate func setupViewControllers() {
+        let layout = UICollectionViewFlowLayout()
+        let favoritesController = FavoritesController(collectionViewLayout: layout)
         viewControllers = [
-            generateNavigationControllers(with: ViewController(), title: "Favorites", image: #imageLiteral(resourceName: "favorite")),
+            generateNavigationControllers(with: favoritesController, title: "Favorites", image: #imageLiteral(resourceName: "favorite")),
             generateNavigationControllers(with: PodcastsSearchController(), title: "Search", image: #imageLiteral(resourceName: "search")),
             generateNavigationControllers(with: ViewController(), title: "Downloads", image: #imageLiteral(resourceName: "download"))
         ]

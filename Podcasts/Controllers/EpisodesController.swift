@@ -37,9 +37,49 @@ class EpisodesController: UITableViewController {
         super.viewDidLoad()
         
         setupTableView()
+        setupNavigationBarButtons()
     }
     
     //MARK:- Setup
+    
+    fileprivate func setupNavigationBarButtons() {
+        let savedPodcasts = UserDefaults.standard.savedPodcasts()
+        if savedPodcasts.firstIndex(where: { $0.trackName == self.podcast?.trackName  && $0.artistName == self.podcast?.artistName}) == nil {
+            let heartBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "heart-outline"), style: .plain, target: self, action: #selector(handleSavingFavorite))
+            heartBarButton.tintColor = .purple
+            navigationItem.rightBarButtonItem = heartBarButton
+        } else {
+            let heartBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "heart-filled"), style: .plain, target: nil, action: nil)
+            heartBarButton.tintColor = .purple
+            navigationItem.rightBarButtonItem = heartBarButton
+        }
+    }
+    
+    @objc fileprivate func handleSavingFavorite() {
+        let heartBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "heart-filled"), style: .plain, target: nil, action: nil)
+        heartBarButton.tintColor = .purple
+        navigationItem.rightBarButtonItem = heartBarButton
+        
+        guard let podcast = self.podcast else {return}
+        var listOfPodcasts = UserDefaults.standard.savedPodcasts()
+        listOfPodcasts.insert(podcast, at: 0)
+        let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
+        UserDefaults.standard.setValue(data, forKey: UserDefaults.favoritedPodcastKey)
+        
+        showBadgeHighlight()
+    }
+    
+    fileprivate func showBadgeHighlight() {
+        UIApplication.mainTabBarController()?.viewControllers?[0].tabBarItem.badgeValue = "New"
+    }
+    
+//    @objc fileprivate func handleRemovingFavorite() {
+//        navigationItem.rightBarButtonItem?.image = #imageLiteral(resourceName: "heart-outline")
+//        guard let podcast = self.podcast else {return}
+//        var listOfPodcasts = UserDefaults.standard.savedPodcasts()
+//        guard let index = listOfPodcasts.firstIndex(of: podcast) else {return}
+//        UserDefaults.standard.removePodcasts(index: index)
+//    }
     
     fileprivate func setupTableView() {
         let nib = UINib(nibName: "EpisodeCell", bundle: nil)
