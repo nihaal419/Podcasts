@@ -21,6 +21,7 @@
 		06950EA823039850006064BF /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06950EA723039850006064BF /* UserDefaults.swift */; };
 		069CA75322FCBC4A003D7C61 /* PlayerDetailsView+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069CA75222FCBC4A003D7C61 /* PlayerDetailsView+Gestures.swift */; };
 		069CA75522FCBFB3003D7C61 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 069CA75422FCBFB3003D7C61 /* UIApplication.swift */; };
+		06B40F892314886D004ABD4B /* DownloadsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B40F882314886D004ABD4B /* DownloadsController.swift */; };
 		06D7B28B22F239570036CAE3 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D7B28A22F239570036CAE3 /* APIService.swift */; };
 		06D7B28E22F23E2A0036CAE3 /* PodcastCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06D7B28D22F23E2A0036CAE3 /* PodcastCell.xib */; };
 		06D7B29022F2422F0036CAE3 /* PodcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D7B28F22F2422F0036CAE3 /* PodcastCell.swift */; };
@@ -52,6 +53,7 @@
 		06950EA723039850006064BF /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		069CA75222FCBC4A003D7C61 /* PlayerDetailsView+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerDetailsView+Gestures.swift"; sourceTree = "<group>"; };
 		069CA75422FCBFB3003D7C61 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+		06B40F882314886D004ABD4B /* DownloadsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsController.swift; sourceTree = "<group>"; };
 		06D7B28A22F239570036CAE3 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		06D7B28D22F23E2A0036CAE3 /* PodcastCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PodcastCell.xib; sourceTree = "<group>"; };
 		06D7B28F22F2422F0036CAE3 /* PodcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastCell.swift; sourceTree = "<group>"; };
@@ -83,9 +85,11 @@
 		06015EE422F1396A00F6D6D0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0629B9FB22DE121A00C11AF5 /* MainTabBarController.swift */,
 				0629B9FF22DE1F6D00C11AF5 /* PodcastsSearchController.swift */,
 				06D7B29122F250AF0036CAE3 /* EpisodesController.swift */,
 				063F624F22FE272E007A5952 /* FavoritesController.swift */,
+				06B40F882314886D004ABD4B /* DownloadsController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -122,7 +126,6 @@
 				0629B9ED22DE120100C11AF5 /* Main.storyboard */,
 				0629B9F222DE120300C11AF5 /* LaunchScreen.storyboard */,
 				0629B9F522DE120300C11AF5 /* Info.plist */,
-				0629B9FB22DE121A00C11AF5 /* MainTabBarController.swift */,
 			);
 			path = Podcasts;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 				06D7B29222F250AF0036CAE3 /* EpisodesController.swift in Sources */,
 				0629B9FC22DE121A00C11AF5 /* MainTabBarController.swift in Sources */,
 				06F5946522F497F40091A56B /* EpisodeCell.swift in Sources */,
+				06B40F892314886D004ABD4B /* DownloadsController.swift in Sources */,
 				06D7B28B22F239570036CAE3 /* APIService.swift in Sources */,
 				06015EE322F12BD000F6D6D0 /* Podcast.swift in Sources */,
 				06F5946022F497430091A56B /* Episode.swift in Sources */,
