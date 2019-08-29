@@ -55,10 +55,26 @@ class PlayerDetailsView: UIView {
     }
     
     fileprivate func playEpisode() {
-        let streamUrl = episode.streamUrl.toSecureHTTPS()
-        guard let url = URL(string: streamUrl) else {return}
+        if episode.fileUrl != nil {
+            playEpisodeUsingFileUrl()
+        } else {
+            let streamUrl = episode.streamUrl.toSecureHTTPS()
+            guard let url = URL(string: streamUrl) else {return}
+            
+            let playerItem = AVPlayerItem(url: url)
+            player.replaceCurrentItem(with: playerItem)
+            player.play()
+        }
+    }
+    
+    fileprivate func playEpisodeUsingFileUrl() {
+        guard let fileUrl = URL(string: episode.fileUrl ?? "") else {return}
+        let fileName = fileUrl.lastPathComponent
         
-        let playerItem = AVPlayerItem(url: url)
+        guard var trueLocation = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
+        trueLocation.appendPathComponent(fileName)
+        
+        let playerItem = AVPlayerItem(url: trueLocation)
         player.replaceCurrentItem(with: playerItem)
         player.play()
     }
