@@ -49,19 +49,29 @@
                             </label>
                         </subviews>
                     </stackView>
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="100%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7g2-dD-zIk">
+                        <rect key="frame" x="47" y="77" width="77" height="34"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                        <size key="shadowOffset" width="0.0" height="1"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="E0D-ig-jGr" secondAttribute="trailing" constant="8" id="0KY-Jl-JVJ"/>
+                    <constraint firstItem="7g2-dD-zIk" firstAttribute="centerX" secondItem="h5s-Fk-UVG" secondAttribute="centerX" id="IsH-By-l6Y"/>
                     <constraint firstItem="h5s-Fk-UVG" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="KfI-bZ-S2Y"/>
                     <constraint firstItem="E0D-ig-jGr" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="LWF-El-WvG"/>
                     <constraint firstItem="E0D-ig-jGr" firstAttribute="leading" secondItem="h5s-Fk-UVG" secondAttribute="trailing" constant="16" id="n9O-ED-DYx"/>
                     <constraint firstItem="h5s-Fk-UVG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="nER-Do-AbK"/>
+                    <constraint firstItem="7g2-dD-zIk" firstAttribute="centerY" secondItem="h5s-Fk-UVG" secondAttribute="centerY" id="x3X-bu-35q"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="descriptionLabel" destination="lkz-Si-wtE" id="hfa-Lp-Fkz"/>
                 <outlet property="episodeImageView" destination="h5s-Fk-UVG" id="nyf-iT-8zy"/>
+                <outlet property="progressLabel" destination="7g2-dD-zIk" id="EhE-bq-ZMy"/>
                 <outlet property="pubDateLabel" destination="N1e-J5-bnb" id="gpw-FO-nag"/>
                 <outlet property="titleLabel" destination="aP3-jB-8Ro" id="0is-fG-vI1"/>
             </connections>

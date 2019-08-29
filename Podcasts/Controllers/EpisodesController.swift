@@ -66,11 +66,11 @@ class EpisodesController: UITableViewController {
         let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
         UserDefaults.standard.setValue(data, forKey: UserDefaults.favoritedPodcastKey)
         
-        showBadgeHighlight()
+        showBadgeHighlight(index: 0)
     }
     
-    fileprivate func showBadgeHighlight() {
-        UIApplication.mainTabBarController()?.viewControllers?[0].tabBarItem.badgeValue = "New"
+    fileprivate func showBadgeHighlight(index: Int) {
+        UIApplication.mainTabBarController()?.viewControllers?[index].tabBarItem.badgeValue = "New"
     }
     
 //    @objc fileprivate func handleRemovingFavorite() {
@@ -97,6 +97,8 @@ class EpisodesController: UITableViewController {
             
             //download the episode
             APIService.shared.downloadEpisode(episode: episode)
+            
+            self.showBadgeHighlight(index: 2)
         }
         
         return [downloadAction]
